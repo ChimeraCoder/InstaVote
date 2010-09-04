@@ -2,13 +2,16 @@ from __future__ import division, print_function
 import unittest
 
 class Ballot:
-
+    '''A Ballot contains a ranked list of candidate names'''
+    #Keep track of candidates who have been eliminated
     eliminated_candidates = set()
 
     def __init__(self, candidate_list):
+        '''Create a ballot from a ranked list of candidate names'''
         self.candidates = candidate_list
 
     def next_candidate(self):
+        '''Determine the next candidate who has not yet been eliminated'''
         candidate_index = 0
         while candidate_index < len(self.candidates):
             if self.candidates[candidate_index] in Ballot.eliminated_candidates:
@@ -21,8 +24,9 @@ class Ballot:
         '''Update the set of eliminated candidates with the newly eliminated candidate'''
         cls.eliminated_candidates.add(newly_eliminated_candidate)
 
-class TestAcceptanceTests(unittest.TestCase):
 
+class BallotClassTester(unittest.TestCase):
+    '''Test the Ballot class'''
     def setUp(self):
         self.abc_candidate_list = ['Adam', 'Bob', 'Charles']
         self.abc_ballot = Ballot(self.abc_candidate_list)
@@ -67,8 +71,42 @@ class TestAcceptanceTests(unittest.TestCase):
         self.assertEqual(self.abc_ballot.candidates, ['Adam', 'Bob', 'Charles'])
 
 
+
+def BallotGenerator(filename):
+    '''Generate a ballot box (list of ballots) from a .csv that contains the ballot information'''
+
+    ballot_box = []
+    with open(filename) as ballot_file:
+        for line in ballot_file:
+            linesplit = line.split(',')
+            linesplit = [name.strip() for name in linesplit]
+            current_ballot = Ballot(linesplit)
+    return ballot_box        
+
+
+class BallotGeneratorTester(unittest.TestCase):
+
+    def test_ballot_generator(self):
+        known_values = [
+            ('Kaley', 'Roxanne', 'Aditya'),
+            ('Roxanne', 'Kaley', 'Aditya'),
+            ('Aditya', 'Kaley', 'Roxanne'),
+            ('Aditya', 'Roxanne', 'Kaley'),
+            ('Roxanne', 'Aditya', 'Kaley'),
+            ('Roxanne', 'Aditya', 'Michael'),
+            ]
+        test_ballot = 'testfiles/test_ballot.csv'
+        ballot_box = BallotGenerator(test_ballot)
+        for ballot_number, ballot in enumerate(ballot_box):
+            for candidate_number, candidate in enumerate(ballot.candidates):
+                expected_candidate = known_values[ballot_number][candidate_number]
+                self.assertEqual(candidate, expected_candidate)
+
+
+
+
+
 if __name__ == '__main__':
     unittest.main()
-
 
 
