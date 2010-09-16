@@ -4,7 +4,6 @@ import unittest
 class Ballot:
     '''A Ballot contains a ranked list of candidate names'''
     #Keep track of candidates who have been eliminated
-    eliminated_candidates = set()
 
     def __init__(self, candidate_list):
         '''Create a ballot from a ranked list of candidate names'''
@@ -19,6 +18,7 @@ class Ballot:
             else:
                 yield self.candidates[candidate_index]
 
+    eliminated_candidates = set()
     @classmethod
     def eliminate_candidate(cls, newly_eliminated_candidate):
         '''Update the set of eliminated candidates with the newly eliminated candidate'''
@@ -38,18 +38,22 @@ class BallotClassTester(unittest.TestCase):
 
 
     def test_create_sample_three_way_ballot(self):
+        '''Create a three-way ballot and check that the candidates are correct'''
         ballot = Ballot(self.abc_candidate_list)
         self.assertEqual(ballot.candidates, self.abc_candidate_list)
 
     def test_candidate_name_generator(self):
+        '''Test that the ballot can eliminate candidates and return the next eligible candidate accurately'''
         for rank, candidate in enumerate(self.defghijk_ballot.next_candidate()):
             self.assertEqual(self.defghijk_candidates_list[rank], candidate)
             #Eliminate the current candidate so that he/she is no longer the top eligible candidate
             self.defghijk_ballot.eliminated_candidates.add(candidate)
 
     def test_candidate_name_generator_with_elimination(self):
+        '''Test that the ballot can yield the same candidate twice, then yield a different candidate once the first candidate is eliminated'''
         count = 0
         for rank, candidate in enumerate(self.defghijk_ballot.next_candidate()):
+            #Check that the candidate that .next_candidate() yields is not in the list of eliminated candidates
             self.assertTrue(candidate not in self.defghijk_ballot.eliminated_candidates)
             count += 1
             if count > 2:
@@ -89,6 +93,7 @@ class BallotBox:
         return list_of_ballots      
     
     def name_candidates(self):
+        '''Create a set that contains the names of all eligible candidates'''
         candidate_names = set()
         for ballot in self.ballots:
             for name in ballot.candidates:
@@ -117,7 +122,7 @@ class BallotBoxTester(unittest.TestCase):
                 self.assertEqual(candidate, expected_candidate)
 
     def test_name_all_candidates(self):
-        '''Test that the candidates' names are being aggregated correctly'''
+        '''Test that the candidates' names are being aggregated correctly in the master set of eligible candidates'''
         expected = set(('Kaley', 'Roxanne', 'Aditya', 'Michael'))
         self.assertEqual(self.ballot_box.candidate_names, expected)
 
