@@ -36,7 +36,6 @@ class BallotClassTester(unittest.TestCase):
         self.abcdefghijk_candidate_list.extend(self.defghijk_candidates_list)
         self.abcdefghijk_ballot = Ballot(self.abcdefghijk_candidate_list)
 
-
     def test_create_sample_three_way_ballot(self):
         '''Create a three-way ballot and check that the candidates are correct'''
         ballot = Ballot(self.abc_candidate_list)
@@ -59,7 +58,6 @@ class BallotClassTester(unittest.TestCase):
             if count > 2:
                 count = 0
                 self.defghijk_ballot.eliminated_candidates.add(candidate)
-
 
     def test_eliminate_candidate_function(self):
         '''Test Ballot.eliminate_candidate()'''
@@ -101,7 +99,7 @@ class BallotBox:
         return candidate_names
 
 class BallotBoxTester(unittest.TestCase):
-
+    '''Test the BallotBox class'''
     def setUp(self):
         self. known_values = [
             ('Kaley', 'Roxanne', 'Aditya'),
@@ -126,8 +124,11 @@ class BallotBoxTester(unittest.TestCase):
         expected = set(('Kaley', 'Roxanne', 'Aditya', 'Michael'))
         self.assertEqual(self.ballot_box.candidate_names, expected)
 
-    
-
+    def test_eliminate_candidates_from_ballot_box(self):
+        '''Test that the ballot box is able to eliminate candidates properly'''
+        Ballot.eliminate_candidate('Aditya')
+        for ballot in self.ballot_box.ballots:
+            self.assertTrue('Aditya' in ballot.eliminated_candidates)
 
 
 if __name__ == '__main__':
