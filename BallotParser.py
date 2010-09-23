@@ -98,6 +98,16 @@ class BallotBox:
                 candidate_names.add(name)
         return candidate_names
 
+    def count_votes(self):
+        vote_counts = dict()
+        for candidate in self.candidate_names:
+            vote_counts[candidate] = 0
+        for ballot in self.ballots:
+            print(ballot.next_candidate())
+            vote_counts[ballot.next_candidate()] += 1
+        return 
+
+
 class BallotBoxTester(unittest.TestCase):
     '''Test the BallotBox class'''
     def setUp(self):
@@ -129,6 +139,18 @@ class BallotBoxTester(unittest.TestCase):
         Ballot.eliminate_candidate('Aditya')
         for ballot in self.ballot_box.ballots:
             self.assertTrue('Aditya' in ballot.eliminated_candidates)
+
+
+    def test_count_votes_in_first_round(self):
+        actual_counts = {
+            'Kaley': 1,
+            'Roxanne': 3,
+            'Aditya' : 2,
+                }
+        vote_results = self.ballot_box.count_votes()
+        for key in vote_results:
+            self.assertTrue(vote_results[key] == actual_counts[key])
+
 
 
 if __name__ == '__main__':
