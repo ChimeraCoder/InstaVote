@@ -138,15 +138,21 @@ class BallotBox:
         winner_found = False
         number_rounds = 0
         while not winner_found:
-           number_rounds +=1
-           vote_counts = self.count_votes()
-           best_candidate = self.find_maximum(vote_counts)
-           if vote_counts[best_candidate] >= winning_number:
+            number_rounds +=1
+            vote_counts = self.count_votes()
+            best_candidate = self.find_maximum(vote_counts)
+            if vote_counts[best_candidate] >= winning_number:
                self.number_rounds = number_rounds
                return best_candidate
-           else:
-               worst_candidate = self.find_minimum(vote_counts)
-               Ballot.eliminate_candidate(worst_candidate)
+            else:
+                worst_candidate = self.find_minimum(vote_counts)
+                worst_number_of_votes = vote_counts[worst_candidate]
+                #If there is a tie for worst_candidate, the candidate returned by find_minimum will be arbitrary, so it is necessary to eliminate all candidates with this same number of votes to ensure that the outcome is predictable
+                for candidate in vote_counts:
+                    if vote_counts[candidate] == worst_number_of_votes:
+                        Ballot.eliminate_candidate(candidate)
+
+
 
 class BallotBoxTester(unittest.TestCase):
     '''Test the BallotBox class'''
