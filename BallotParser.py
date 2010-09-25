@@ -120,7 +120,10 @@ class BallotBox:
                 continue
             vote_counts[candidate] = 0
         for ballot in self.ballots:
-            candidate = next(ballot.next_candidate())
+            try: candidate = next(ballot.next_candidate())
+            except StopIteration:
+                #If the ballot has no more valid candidates, then skip the ballot
+                continue
             vote_counts[candidate]+= 1
         return vote_counts 
 
@@ -144,7 +147,6 @@ class BallotBox:
            else:
                worst_candidate = self.find_minimum(vote_counts)
                Ballot.eliminate_candidate(worst_candidate)
-               print(worst_candidate)
 
 class BallotBoxTester(unittest.TestCase):
     '''Test the BallotBox class'''
