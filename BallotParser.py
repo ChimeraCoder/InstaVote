@@ -90,6 +90,9 @@ class BallotBox:
     def __init__(self, filename):
         self.ballots = self.BallotGenerator(filename)
         self.candidate_names = self.name_candidates()
+        #if positive, self.number_rounds represents the number of rounds required to determine the winner
+        self.number_rounds = -1
+
 
     def BallotGenerator(self, filename):
         '''Generate a ballot box (list of ballots) from a .csv that contains the ballot information'''
@@ -129,23 +132,24 @@ class BallotBox:
 
     def identify_winner(self):
         winning_number = len(self.ballots)//2 + 1
-        print(winning_number)
         winner_found = False
+        number_rounds = 0
         while not winner_found:
+           number_rounds +=1
            vote_counts = self.count_votes()
            best_candidate = self.find_maximum(vote_counts)
            if vote_counts[best_candidate] >= winning_number:
+               self.number_rounds = number_rounds
                return best_candidate
            else:
                worst_candidate = self.find_minimum(vote_counts)
                Ballot.eliminate_candidate(worst_candidate)
-               print(worst_candidate) 
-
+               print(worst_candidate)
 
 class BallotBoxTester(unittest.TestCase):
     '''Test the BallotBox class'''
     def setUp(self):
-        self. known_values = [
+        self.test_ballot_1_known_values = [
             ('Kaley', 'Roxanne', 'Aditya'),
             ('Roxanne', 'Kaley', 'Aditya'),
             ('Aditya', 'Kaley', 'Roxanne'),
@@ -153,27 +157,27 @@ class BallotBoxTester(unittest.TestCase):
             ('Roxanne', 'Aditya', 'Kaley'),
             ('Roxanne', 'Aditya', 'Michael'),
             ]
-        self.test_ballot_file = 'testfiles/test_ballot.csv'
-        self.ballot_box = BallotBox(self.test_ballot_file)
+        self.test_ballot_1_file = 'testfiles/test_ballot.csv'
+        self.ballot_box_1 = BallotBox(self.test_ballot_1_file)
         #Make sure the set of eliminated_candidates is clear at the beginning of each unit test
         Ballot.eliminated_candidates = set()
 
     def test_ballot_generator(self):
         '''Test that a ballot is being constructed correctly from a .csv file'''
-        for ballot_number, ballot in enumerate(self.ballot_box.ballots):
+        for ballot_number, ballot in enumerate(self.ballot_box_1.ballots):
             for candidate_number, candidate in enumerate(ballot.candidates):
-                expected_candidate = self.known_values[ballot_number][candidate_number]
+                expected_candidate = self.test_ballot_1_known_values[ballot_number][candidate_number]
                 self.assertEqual(candidate, expected_candidate)
 
     def test_name_all_candidates(self):
         '''Test that the candidates' names are being aggregated correctly in the master set of eligible candidates'''
         expected = set(('Kaley', 'Roxanne', 'Aditya', 'Michael'))
-        self.assertEqual(self.ballot_box.candidate_names, expected)
+        self.assertEqual(self.ballot_box_1.candidate_names, expected)
 
     def test_eliminate_candidates_from_ballot_box(self):
         '''Test that the ballot box is able to eliminate candidates properly'''
         Ballot.eliminate_candidate('Aditya')
-        for ballot in self.ballot_box.ballots:
+        for ballot in self.ballot_box_1.ballots:
             self.assertTrue('Aditya' in ballot.eliminated_candidates)
 
     def test_count_votes_in_first_round(self):
@@ -184,25 +188,25 @@ class BallotBoxTester(unittest.TestCase):
             'Aditya' : 2,
             'Michael' : 0,
                 }
-        vote_results = self.ballot_box.count_votes()
+        vote_results = self.ballot_box_1.count_votes()
         for key in vote_results:
             self.assertTrue(vote_results[key] == actual_counts[key])
 
     def test_find_minimum_votes_in_round(self):
         '''Test that the BallotBox can correctly identify the first candidate to be eliminated'''
-        first_round_vote_resuts = self.ballot_box.count_votes()
-        round_loser = self.ballot_box.find_minimum(first_round_vote_resuts)
+        first_round_vote_resuts = self.ballot_box_1.count_votes()
+        round_loser = self.ballot_box_1.find_minimum(first_round_vote_resuts)
         self.assertTrue(round_loser == 'Michael')
 
     def test_find_minimum_votes_in_round(self):
         '''Test that the BallotBox can correctly identify the candidate with the most votes in a round'''
-        first_round_vote_resuts = self.ballot_box.count_votes()
-        round_loser = self.ballot_box.find_maximum(first_round_vote_resuts)
+        first_round_vote_resuts = self.ballot_box_1.count_votes()
+        round_loser = self.ballot_box_1.find_maximum(first_round_vote_resuts)
         self.assertTrue(round_loser == 'Roxanne')
 
 
     def test_identify_winner(self):
-        winner = self.ballot_box.identify_winner()
+        winner = self.ballot_box_1.identify_winner()
         self.assertTrue(winner == 'Roxanne')
 
 
