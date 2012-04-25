@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
     name='InstaVote',
-    version='0.2.0',
+    version='0.2.1',
     author='Aditya Mukerjee',
     author_email='dev@chimeracoder.net',
     packages=['instavote',],

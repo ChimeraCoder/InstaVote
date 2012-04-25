@@ -2,7 +2,7 @@ from __future__ import division, print_function
 import BallotParser
 import sys
 
-def main(infile):
+def process_ballots(infile):
     ballot_created = False
 
     while not ballot_created:
@@ -24,4 +24,4 @@ def main(infile):
     print(ballot_box.number_rounds, 'rounds of voting were run')
 
 if __name__ == '__main__':
-    main(sys.argv[1])
+    process_ballots(sys.argv[1])
