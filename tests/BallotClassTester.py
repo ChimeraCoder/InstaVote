@@ -1,6 +1,6 @@
 from __future__ import division, print_function
 import unittest
-from BallotParser import BallotBox, Ballot
+from instavote.BallotParser import BallotBox, Ballot
 
 class BallotClassTester(unittest.TestCase):
     '''Test the Ballot class'''
