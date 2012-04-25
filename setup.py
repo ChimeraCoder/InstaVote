@@ -9,6 +9,6 @@ setup(
     url='https://github.com/ChimeraCoder/InstaVote',
     license='LICENSE',
     description='A Python module that determines the winner of an election using instant-runoff voting rules',
-    long_description=open('README.txt').read(),
+    long_description=open('README').read(),
     install_requires=[],
 )
