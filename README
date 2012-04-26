@@ -1,13 +1,16 @@
-h1. InstaVote
+InstaVote
+=========
 
 InstaVote is a Python module that determines the winner of an election using instant-runoff voting rules.
 
 
-h2. Instant-Runoff Voting
+Instant-Runoff Voting
+--------
 
-"Instant Runoff Voting":http://en.wikipedia.org/wiki/Instant-runoff_voting, also known as the Alternative Vote, is a voting system that allows the user to rank the candidates in order of preference. It is superior to the 'first-past-the-post' system practiced in many states and countries, as it is arguably the system that best satisfies the criteria in "Arrow's Impossibility Theorem":http://en.wikipedia.org/wiki/Arrow's_Impossibility_Theorem
+[Instant Runoff Voting](http://en.wikipedia.org/wiki/Instant-runoff_voting), also known as the Alternative Vote, is a voting system that allows the user to rank the candidates in order of preference. It is superior to the 'first-past-the-post' system practiced in many states and countries, as it is arguably the system that best satisfies the criteria in [Arrow's Impossibility Theorem]( http://en.wikipedia.org/wiki/Arrow's_Impossibility_Theorem)
 
 
-h2. Current Implementation
+Current Implementation
+---------------
 
 This module will identify the single winner in an election that uses instant-runoff voting rules. Future versions may be written to accomodate elections with multiple winners.
