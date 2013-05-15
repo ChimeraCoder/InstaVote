@@ -14,3 +14,9 @@ Current Implementation
 ---------------
 
 This module will identify the single winner in an election that uses instant-runoff voting rules. Future versions may be written to accomodate elections with multiple winners.
+
+
+License
+-----------
+
+InstaVote is licensed under version 3 of the GNU Affero General Public License (AGPL). Details are provided in the COPYING/LICENSE file.
